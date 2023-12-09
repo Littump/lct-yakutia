@@ -1,26 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
 
 
-class Company(models.Model):
+class User(AbstractUser):
     name = models.CharField(max_length=120)
     logo = models.ImageField(upload_to='logo/')
 
 
-class User(AbstractUser):
-    first_name = models.CharField(_('first name'), max_length=150)
-    last_name = models.CharField(_('last name'), max_length=150)
-    company = models.OneToOneField(
-        Company,
-        related_name='owner',
-        on_delete=models.PROTECT,
-    )
-
-
 class Department(models.Model):
     company = models.ForeignKey(
-        Company,
+        User,
         related_name='departments',
         on_delete=models.CASCADE,
     )
@@ -32,7 +21,7 @@ class Department(models.Model):
 
 class Employee(models.Model):
     department = models.ForeignKey(
-        Company,
+        Department,
         related_name='employees',
         on_delete=models.CASCADE,
     )
