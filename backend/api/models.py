@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     name = models.CharField(max_length=120)
-    logo = models.ImageField(upload_to='logo/')
+    logo = models.ImageField(upload_to='logo/', null=True, blank=True)
 
 
 class Department(models.Model):
