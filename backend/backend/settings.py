@@ -161,6 +161,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }
 
+AUTH_USER_MODEL = 'api.User'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -174,9 +176,10 @@ SWAGGER_SETTINGS = {
     }
 }
 
-# DJOSER = {
-#     'SERIALIZERS': {
-#         'user': 'api.serializers.UserCustomSerializer',
-#         'current_user': 'api.serializers.UserCustomSerializer',
-#     }
-# }
+DJOSER = {
+    'SERIALIZERS': {
+        'user': 'api.serializers.UserCustomSerializer',
+        'current_user': 'api.serializers.UserCustomSerializer',
+        'user_create': 'api.serializers.UserCustomSerializer',
+    }
+}

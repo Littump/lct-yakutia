@@ -1,17 +1,19 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-
-User = get_user_model()
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 
 class Company(models.Model):
     name = models.CharField(max_length=120)
-    logo = models.ImageField(upload_to='logo/', blank=True, null=True)
-    owner = models.OneToOneField(
-        User,
-        related_name='company',
-        blank=True,
+    logo = models.ImageField(upload_to='logo/')
+
+
+class User(AbstractUser):
+    first_name = models.CharField(_('first name'), max_length=150)
+    last_name = models.CharField(_('last name'), max_length=150)
+    company = models.OneToOneField(
+        Company,
+        related_name='owner',
         on_delete=models.PROTECT,
     )
 
