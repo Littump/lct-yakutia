@@ -1,6 +1,6 @@
 from api.models import Department, Employee
 from rest_framework import serializers
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
 
 from api.models import User
 
@@ -22,3 +22,10 @@ class UserCustomSerializer(UserSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'name', 'logo']
+
+
+class UserCustomCreateSerializer(UserCreateSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'name', 'logo', 'password']
