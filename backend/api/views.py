@@ -1,4 +1,4 @@
-from api.models import Company, Department, Employee
+from api.models import Department, Employee
 from api.serializers import (DepartmentSerializer,
                              EmployeeSerializer)
 from django.contrib.auth import get_user_model
