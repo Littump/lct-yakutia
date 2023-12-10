@@ -18,3 +18,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        departments = user.departments
+        return departments
