@@ -23,3 +23,6 @@ class DepartmentViewSet(viewsets.ModelViewSet):
         user = self.request.user
         departments = user.departments
         return departments
+
+    def perform_create(self, serializer):
+        serializer.save(department=self.request.user)

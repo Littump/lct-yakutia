@@ -14,7 +14,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = '__all__'
+        fields = ['name', 'head_name', 'head_contact', 'description']
 
 
 class UserCustomSerializer(UserSerializer):
