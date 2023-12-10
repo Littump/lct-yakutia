@@ -26,3 +26,10 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(company=self.request.user)
+
+    @action(detail=True, methods=['get'])
+    def get_employees(self, request, pk=None):
+        department = self.get_object()
+        employees = department.employees.all()
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
