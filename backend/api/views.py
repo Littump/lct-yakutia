@@ -21,8 +21,8 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        departments = user.departments
+        departments = user.departments.all()
         return departments
 
     def perform_create(self, serializer):
-        serializer.save(department=self.request.user)
+        serializer.save(company=self.request.user)
