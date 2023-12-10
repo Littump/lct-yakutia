@@ -26,7 +26,7 @@ class Employee(models.Model):
         on_delete=models.CASCADE,
     )
     name = models.CharField(max_length=120)
-    probability = models.FloatField()
+    probability = models.FloatField(blank=True)
 
     age = models.PositiveIntegerField()
     EDUCATION_CHOICES = [
