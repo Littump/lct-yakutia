@@ -27,7 +27,7 @@ class Employee(models.Model):
     )
     name = models.CharField(max_length=120)
     probability = models.FloatField(blank=True)
-
+    mail = models.EmailField()
     age = models.PositiveIntegerField()
     EDUCATION_CHOICES = [
         ('0', 'Без образования'),
@@ -54,10 +54,10 @@ class Employee(models.Model):
         default='gum',
     )
     GENDER_CHOICES = [
-        ('m', 'Мужской'),
-        ('f', 'Женский'),
+        ('1', 'Мужской'),
+        ('0', 'Женский'),
     ]
-    gender = models.CharField(
+    is_male = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
         default='m',
@@ -90,14 +90,8 @@ class Employee(models.Model):
         default='0',
     )
     salary = models.IntegerField()
-    ROLE_CHOICES = [
-        ('role1', 'Роль 1'),
-        ('role2', 'Роль 2'),
-    ]
     role = models.CharField(
-        max_length=10,
-        choices=ROLE_CHOICES,
-        default='role1',
+        max_length=30,
     )
     total_working_years = models.FloatField()
     years_at_company = models.FloatField()
