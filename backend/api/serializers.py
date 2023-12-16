@@ -1,8 +1,7 @@
-from api.models import Department, Employee
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
-from djoser.serializers import UserSerializer, UserCreateSerializer
 
-from api.models import User
+from api.models import Department, Employee, User
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
