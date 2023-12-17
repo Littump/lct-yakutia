@@ -89,6 +89,7 @@ class Helper:
 
         time_interval_4_hours = timedelta(hours=4)
         time_interval_2_days = timedelta(days=2)
+        time_interval_2_days_seconds = time_interval_2_days.total_seconds()
 
         target_email = employee.mail
 
@@ -161,22 +162,22 @@ class Helper:
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'in_fraction_answer_time_number_answers': (
                 in_address_by_target
-                .apply(
-                    lambda row: (in_sent_by_target['dt'] - row['dt'])
-                    .min() if any(
+                .apply(lambda row: (
+                    (in_sent_by_target['dt'] - row['dt'])
+                    .dt.total_seconds().min()
+                    if any(
                         (
-                            in_sent_by_target['dt'] - row['dt']
-                            < time_interval_2_days
+                            (in_sent_by_target['dt'] - row['dt'])
+                            .dt.total_seconds() < time_interval_2_days_seconds
                         ) & (
                             in_sent_by_target['dt'] > row['dt']
                         )
-                    ) else 0.01,
-                    axis=1
-                ).mean()
+                    ) else 0.01
+                ), axis=1).mean()
             ),
             'in_number_answered': (
                 in_address_by_target
@@ -190,7 +191,7 @@ class Helper:
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'in_number_symbol': (
                 in_sent_by_target['email_text']
@@ -206,10 +207,10 @@ class Helper:
                 if len(in_sent_by_target) > 0 else 0.01
             ),
             'in_fraction_bytes_get_sent': (
-                df[target_email in df['sender']]['text']
+                df.loc[df['sender'] == target_email, 'email_text']
                 .apply(
                     lambda x: len(str(x).encode('utf-8')) if pd.notna(x) else 0
-                ).sum() / in_sent_by_target['text']
+                ).sum() / in_sent_by_target['email_text']
                 .apply(
                     lambda x: len(str(x).encode('utf-8')) if pd.notna(x) else 0
                 ).sum()
@@ -225,7 +226,7 @@ class Helper:
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'out_number_send': len(out_sent_by_target),
             'out_number_get': len(out_address_by_target),
@@ -252,7 +253,7 @@ class Helper:
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'out_fraction_answer_time_number_answers': (
                 out_address_by_target
@@ -266,7 +267,7 @@ class Helper:
                             ) & (
                                 out_sent_by_target['dt'] > row['dt']
                             )
-                        ) else 0.01
+                        ) else timedelta(seconds=0)
                     ),
                     axis=1
                 ).mean()
@@ -283,7 +284,7 @@ class Helper:
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'out_number_symbol': (
                 out_sent_by_target['email_text']
@@ -299,10 +300,10 @@ class Helper:
                 if len(out_sent_by_target) > 0 else 0.01
             ),
             'out_fraction_bytes_get_sent': (
-                df[target_email in df['sender']]['text']
+                df.loc[df['sender'] == target_email, 'email_text']
                 .apply(
                     lambda x: len(str(x).encode('utf-8')) if pd.notna(x) else 0
-                ).sum() / out_sent_by_target['text']
+                ).sum() / out_sent_by_target['email_text']
                 .apply(
                     lambda x: len(str(x).encode('utf-8')) if pd.notna(x) else 0
                 ).sum()
@@ -311,14 +312,15 @@ class Helper:
                 out_address_by_target.apply(
                     lambda row: 1 if ('?' in row['email_text']) and any(
                         (
-                            out_sent_by_target['dt'] - row['dt']
-                            < time_interval_2_days
+                                (out_sent_by_target['dt'] - row['dt'])
+                                .dt.total_seconds()
+                                < time_interval_2_days_seconds
                         ) & (
-                            out_sent_by_target['dt'] > row['dt']
+                                out_sent_by_target['dt'] > row['dt']
                         )
                     ) else 0,
                     axis=1
-                ).sum()
+                ).astype(int).sum()
             ),
             'outdoor_context_email': outdoor_context_email_text,
             'indoor_context_email': indoor_context_email_text,
