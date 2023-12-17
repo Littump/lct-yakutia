@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
+    'layoff_model.apps.LayoffModelConfig',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
