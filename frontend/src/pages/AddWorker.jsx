@@ -13,7 +13,7 @@ import { Block } from "../components/UI/Block";
 import ProbabilityDiagram from "../components/ProbabilityDiagram";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
-import AddMessagesByCSV from "../components/addMessagesByCSV";
+import AddMessagesByCSV from "../components/AddMessagesByCSV";
 
 const validationSchema = yup.object().shape({
   age: yup

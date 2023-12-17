@@ -9,7 +9,7 @@ import { useDeleteWorkerMutation } from "../services/Service";
 import { animateScroll as scroll } from "react-scroll";
 import getEducationLevel from "../helpers/getEducationLevel";
 import getEducationField from "../helpers/getEducationField";
-import AddMessagesByCSV from "../components/addMessagesByCSV";
+import AddMessagesByCSV from "../components/AddMessagesByCSV";
 import { RecalculateWorker } from "../components/UI/RecalculateWorker";
 
 export default memo(function Worker() {
