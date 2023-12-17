@@ -367,13 +367,13 @@ class Helper:
         tfidf_m_out = self.tfidf_vectorizer.transform(df['normalized_out'])
         tfidf_d_out = pd.DataFrame(
             tfidf_m_out.toarray(),
-            columns=self.tfidf_vectorizer.get_feature_names()
+            columns=self.tfidf_vectorizer.get_feature_names_out()
         )
 
         tfidf_m_in = self.tfidf_vectorizer.transform(df['normalized_in'])
         tfidf_d_in = pd.DataFrame(
             tfidf_m_in.toarray(),
-            columns=self.tfidf_vectorizer.get_feature_names()
+            columns=self.tfidf_vectorizer.get_feature_names_out()
         )
 
         tfidf_d = pd.concat(
