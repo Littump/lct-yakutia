@@ -426,6 +426,6 @@ class Helper:
             'is_child',
             'is_house',
             'work_accident'
-        ]].astype(bool)
+        ]].astype(str)
         prediction_proba = self.ensemble_model.predict_proba(df)[:, 1]
         return float(prediction_proba[0])
