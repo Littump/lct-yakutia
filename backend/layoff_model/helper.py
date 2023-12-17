@@ -92,7 +92,7 @@ class Helper:
         target_email = employee.mail
 
         sent_by_target = df[df['sender'] == target_email]
-        address_by_target = df[target_email in df['addreses']]
+        address_by_target = df[df['addreses'].str.contains(target_email, na=False)]
 
         in_address_by_target = address_by_target[
             sent_by_target['is_indoor'] == 1
