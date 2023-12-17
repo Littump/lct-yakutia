@@ -80,7 +80,6 @@ class Helper:
         current_directory = os.getcwd()
         csv_path = os.path.join(
             current_directory,
-            os.pardir,
             'media',
             'docs',
             'messages.csv',
