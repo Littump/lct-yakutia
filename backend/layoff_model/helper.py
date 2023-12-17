@@ -84,7 +84,7 @@ class Helper:
             'docs',
             'messages.csv',
         )
-        df = pd.read_csv(csv_path, delimiter='\t')
+        df = pd.read_csv(csv_path)
 
         time_interval_4_hours = timedelta(hours=4)
         time_interval_2_days = timedelta(days=2)
