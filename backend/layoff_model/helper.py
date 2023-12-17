@@ -398,11 +398,11 @@ class Helper:
         )
         df['in_fraction_answer_time_number_answers'] = (
             df['in_fraction_answer_time_number_answers']
-            .dt.total_seconds().astype(float)
+            .apply(lambda x: x.total_seconds() if pd.notnull(x) else 0)
         )
         df['out_fraction_answer_time_number_answers'] = (
             df['out_fraction_answer_time_number_answers']
-            .dt.total_seconds().astype(float)
+            .apply(lambda x: x.total_seconds() if pd.notnull(x) else 0)
         )
 
         float_features = (
