@@ -5,6 +5,7 @@ import os
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from djoser.views import UserViewSet
+import pandas as pd
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -135,15 +136,15 @@ class FileMessagesView(View):
 
     def post(self, request, *args, **kwargs):
         existing_file_path = self.get_file_path()
-        with open(existing_file_path, 'r', encoding='utf-8') as existing_file:
-            existing_data = set(existing_file.read().splitlines())
+        existing_data = pd.read_csv(existing_file_path)
         csv_file = request.FILES['csv_file']
         csv_file_wrapper = io.TextIOWrapper(csv_file.file, encoding='utf-8')
-        csv_data = set(csv_file_wrapper.read().splitlines())
-        csv_data_without_duplicates = csv_data.difference(existing_data)
-        merged_data = existing_data.union(csv_data_without_duplicates)
-        with open(existing_file_path, 'w', encoding='utf-8') as merged_file:
-            merged_file.write('\n'.join(merged_data))
+        csv_data = pd.read_csv(csv_file_wrapper)
+
+        merged_df = pd.concat([existing_data, csv_data])
+        merged_df = merged_df.drop_duplicates()
+        merged_df.to_csv(existing_file_path, index=False)
+
         return JsonResponse({'status': 'success'})
 
 
