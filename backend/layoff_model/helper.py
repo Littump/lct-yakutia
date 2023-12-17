@@ -412,6 +412,20 @@ class Helper:
         df[float_features] = df[float_features].fillna(0.01)
         df[float_features] = df[float_features].astype(float)
         df[cat_features] = df[cat_features].fillna('nan').astype(str)
-
+        df[[
+            'education_level',
+            'is_male',
+            'is_married',
+            'is_child',
+            'is_house',
+            'work_accident'
+        ]] = df[[
+            'education_level',
+            'is_male',
+            'is_married',
+            'is_child',
+            'is_house',
+            'work_accident'
+        ]].astype(bool)
         prediction_proba = self.ensemble_model.predict_proba(df)[:, 1]
         return float(prediction_proba[0])
