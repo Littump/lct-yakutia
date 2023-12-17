@@ -1,9 +1,11 @@
 import csv
 import io
+import os
 
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from djoser.views import UserViewSet
+import pandas as pd
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -11,18 +13,19 @@ from rest_framework.response import Response
 
 from api.models import Department, Employee
 from api.serializers import DepartmentSerializer, EmployeeSerializer
-from utils.recalculate import recalculate
+from layoff_model.helper import Helper
 
 
 class CustomUserViewSet(UserViewSet):
     @action(detail=False, methods=['get'])
     def recalculate(self, request):
+        helper = Helper()
         user = self.request.user
         departments = user.departments.all()
         for department in departments:
             employees = department.employees.all()
             for employee in employees:
-                recalculate(employee)
+                helper.recalculate(employee)
             return Response(status=status.HTTP_200_OK)
 
 
@@ -111,8 +114,19 @@ class FileEmployeesView(View):
 
 
 class FileMessagesView(View):
+    @staticmethod
+    def get_file_path():
+        current_directory = os.getcwd()
+        file_path = os.path.join(
+            current_directory,
+            'media',
+            'docs',
+            'messages.csv',
+        )
+        return file_path
+
     def get(self, request, *args, **kwargs):
-        file_path = '/app/media/docs/messages.csv'
+        file_path = self.get_file_path()
         with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type='text/csv')
             response['Content-Disposition'] = (
@@ -121,16 +135,17 @@ class FileMessagesView(View):
             return response
 
     def post(self, request, *args, **kwargs):
-        existing_file_path = '/app/media/docs/messages.csv'
-        with open(existing_file_path, 'r', encoding='utf-8') as existing_file:
-            existing_data = set(existing_file.read().splitlines())
+        existing_file_path = self.get_file_path()
+        existing_data = pd.read_csv(existing_file_path)
+
         csv_file = request.FILES['csv_file']
         csv_file_wrapper = io.TextIOWrapper(csv_file.file, encoding='utf-8')
-        csv_data = set(csv_file_wrapper.read().splitlines())
-        csv_data_without_duplicates = csv_data.difference(existing_data)
-        merged_data = existing_data.union(csv_data_without_duplicates)
-        with open(existing_file_path, 'w', encoding='utf-8') as merged_file:
-            merged_file.write('\n'.join(merged_data))
+        csv_data = pd.read_csv(csv_file_wrapper)
+
+        merged_df = pd.concat([existing_data, csv_data])
+        merged_df = merged_df.drop_duplicates()
+        merged_df.to_csv(existing_file_path, index=False)
+
         return JsonResponse({'status': 'success'})
 
 
@@ -153,8 +168,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def recalculate(self, request, pk=None):
+        helper = Helper()
         employee = self.get_object()
-        recalculate(employee)
+        helper.recalculate(employee)
         return Response(status=status.HTTP_200_OK)
 
 
@@ -180,8 +196,9 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def recalculate(self, request, pk=None):
+        helper = Helper()
         department = self.get_object()
         employees = department.employees.all()
         for employee in employees:
-            recalculate(employee)
+            helper.recalculate(employee)
         return Response(status=status.HTTP_200_OK)
