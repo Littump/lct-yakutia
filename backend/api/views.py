@@ -137,7 +137,6 @@ class FileMessagesView(View):
     def post(self, request, *args, **kwargs):
         existing_file_path = self.get_file_path()
         existing_data = pd.read_csv(existing_file_path)
-
         csv_file = request.FILES['csv_file']
         csv_file_wrapper = io.TextIOWrapper(csv_file.file, encoding='utf-8')
         csv_data = pd.read_csv(csv_file_wrapper)
