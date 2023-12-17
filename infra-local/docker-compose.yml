@@ -21,11 +21,12 @@ services:
     depends_on:
       - db
   # frontend:
-  #   build:
-  #     context: ../frontend/
-  #     dockerfile: Dockerfile
+  #   restart: always
+  #   image: frontend:latest
   #   volumes:
   #     - ../frontend/:/app/result_build/
+  #   depends_on:
+  #     - backend
   nginx:
     image: nginx:1.19.3
     ports:
@@ -34,4 +35,6 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - static_value:/var/www/backend/static/
       - media_value:/var/www/backend/media/
-      # - ../frontend/dist:/usr/share/nginx/html/
+    #   - ../frontend/dist:/usr/share/nginx/html/
+    # depends_on:
+    #   - frontend
