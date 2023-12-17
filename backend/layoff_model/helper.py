@@ -98,15 +98,25 @@ class Helper:
             na=False
         )]
 
-        in_address_by_target = address_by_target[
-            sent_by_target['is_indoor'] == 1
-        ]
-        out_address_by_target = address_by_target[
-            sent_by_target['is_indoor'] == 0
-        ]
+        in_address_by_target = address_by_target.loc[
+            sent_by_target.index,
+            :
+        ][sent_by_target['is_indoor'] == 1]
+        
+        out_address_by_target = address_by_target.loc[
+            sent_by_target.index,
+            :
+        ][sent_by_target['is_indoor'] == 0]
 
-        in_sent_by_target = sent_by_target[sent_by_target['is_indoor'] == 1]
-        out_sent_by_target = sent_by_target[sent_by_target['is_indoor'] == 0]
+        in_sent_by_target = sent_by_target.loc[
+            sent_by_target.index,
+            :
+        ][sent_by_target['is_indoor'] == 1]
+        
+        out_sent_by_target = sent_by_target.loc[
+            sent_by_target.index,
+            :
+        ][sent_by_target['is_indoor'] == 0]
 
         outdoor_context_email_text = (
             ' '.join(out_sent_by_target['email_text'].astype(str))
