@@ -85,6 +85,7 @@ class Helper:
             'messages.csv',
         )
         df = pd.read_csv(csv_path)
+        df['dt'] = pd.to_datetime(df['dt'])
 
         time_interval_4_hours = timedelta(hours=4)
         time_interval_2_days = timedelta(days=2)
@@ -92,7 +93,10 @@ class Helper:
         target_email = employee.mail
 
         sent_by_target = df[df['sender'] == target_email]
-        address_by_target = df[df['addreses'].str.contains(target_email, na=False)]
+        address_by_target = df[df['addreses'].str.contains(
+            target_email,
+            na=False
+        )]
 
         in_address_by_target = address_by_target[
             sent_by_target['is_indoor'] == 1
