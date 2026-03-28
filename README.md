@@ -1,25 +1,34 @@
-# Запуск проекта с использованием Docker Compose
+# ЛЧТ «Якутия» — прогноз текучести и HR-аналитика
 
-1. Запустите проект с использованием Docker Compose:
+Решение для инженерно-программного конкурса (кейс с ML-моделью увольнений): **Django REST API**, загрузка сотрудников из **CSV**, расчёт вероятностей (модуль `layoff_model`), веб-клиент на **React**.
 
-    ```
-    docker-compose up --build
-    ```
+## Возможности
 
-   Эта команда соберет и запустит контейнеры в вашем проекте.
+- Учёт подразделений и сотрудников, выгрузка в CSV
+- Пересчёт показателей по данным HR
+- Swagger UI: после запуска — `http://localhost/swagger/`
 
-# Сбор статических файлов Django
+## Запуск (Docker Compose)
 
-2. Перейдите в контейнер `backend` и выполниты команду для сбора статических файлов Django и для миграции:
+```bash
+docker compose -f infra/docker-compose.yml up --build
+# или локальная среда:
+docker compose -f infra-local/docker-compose.yml up --build
+```
 
-    ```
-    python manage.py collectstatic
-    python manage.py migrate
-    ```
+В контейнере `backend`:
 
-   Первая команда соберет статические файлы и поместит их в директорию, указанную в настройках Django для хранения статических файлов. Вторая же создаст нужные таблицы в базе данных.
+```bash
+python manage.py collectstatic
+python manage.py migrate
+```
 
-# Доступ к Swagger UI
+## Стек
 
-3. После запуска проекта, откройте веб-браузер и перейдите по адресу [http://localhost/swagger/](http://localhost/swagger/) для доступа к Swagger UI и документации API вашего проекта.
+- **Backend:** Django 4.2, DRF, PostgreSQL, pandas  
+- **Frontend:** React (каталог `frontend/`)  
+- **Инфраструктура:** Docker Compose (`infra/`, `infra-local/`)
 
+## Репозиторий
+
+[github.com/Littump/lct-yakutia](https://github.com/Littump/lct-yakutia)
